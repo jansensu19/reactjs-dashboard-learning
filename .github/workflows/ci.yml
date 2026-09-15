@@ -1,0 +1,36 @@
+name: CI Dashboard Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-test:
+    name: Lint and Build Check
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Pull down the code
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # 2. Setup Node.js runtime environment
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      # 3. Clean install all dependencies (faster and strictly reproducible)
+      - name: Install Dependencies
+        run: npm ci
+
+      # 4. Run ESLint to catch syntax and React hook violations
+      - name: Run Linter
+        run: npm run lint
+
+      # 5. Build production bundle with Vite
+      - name: Build Production Assets
+        run: npm run build
