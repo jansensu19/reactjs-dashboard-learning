@@ -8,6 +8,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import LoginModal from "./components/auth/LoginModal";
 import { useAuth } from "./context/AuthContext";
 import ProductsPage from "./pages/ProductsPage";
+import TicketsPage from "./pages/TicketsPage";
 
 export default function App() {
   const { isAuthenticated } = useAuth();
@@ -29,6 +30,7 @@ export default function App() {
         <Route path="products" element={<ProductsPage />} />
         <Route path="transactions" element={<TransactionsPage />} />
         <Route path="customers" element={<CustomersPage />} />
+        <Route path="tickets" element={<TicketsPage />} />
         <Route path="settings" element={<SettingsPage />} />
       </Route>
 

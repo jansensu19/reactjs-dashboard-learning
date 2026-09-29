@@ -20,6 +20,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     { path: "/products", label: "Inventory", icon: "📦" },
     { path: "/transactions", label: "Transactions", icon: "💳" },
     { path: "/customers", label: "Customers", icon: "👥" },
+    { path: "/tickets", label: "Tickets", icon: "🎫" },
     { path: "/settings", label: "Settings", icon: "⚙️" },
   ];
 

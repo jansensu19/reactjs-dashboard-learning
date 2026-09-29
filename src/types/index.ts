@@ -56,3 +56,28 @@ export interface DashboardDataResponse {
 export interface ProductsDataResponse {
   products: Product[];
 }
+
+export interface TicketsDataResponse {
+  tickets: Ticket[];
+}
+
+export type TicketPriority = "Low" | "Medium" | "High" | "Urgent";
+
+export type TicketStatus = "Open" | "In Progress" | "Resolved" | "Closed";
+
+export type TicketCategory = "Billing" | "Technical" | "General" | "Feature Request";
+
+export interface Ticket{
+  id: string;
+  title: string;
+  description: string;
+  priority: TicketPriority;
+  status: TicketStatus;
+  category: TicketCategory;
+  assignee?: string;
+  createdAt: string;
+}
+
+export interface TicketsDataResponse { 
+  tickets: Ticket[]; 
+}

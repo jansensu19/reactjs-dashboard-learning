@@ -3,6 +3,7 @@ import {
   Order,
   MonthlyRevenue,
   Product,
+  Ticket,
 } from "../types";
 
 export const statsData: DashboardStat[] = [
@@ -108,5 +109,58 @@ export const initialProducts: Product[] = [
     price: 34.99,
     stock: 3,
     status: "Low Stock",
+  },
+];
+
+export const initialTickets: Ticket[] = [
+  {
+    id: "TCK-101",
+    title: "Payment gateway timeout on checkout",
+    description: "Customer reported Stripe credit card payments failing with a 504 gateway timeout.",
+    priority: "Urgent",
+    status: "In Progress",
+    category: "Billing",
+    assignee: "Sophia Martinez",
+    createdAt: "2026-09-28",
+  },
+  {
+    id: "TCK-102",
+    title: "Cannot download invoice PDF",
+    description: "Clicking 'Download Receipt' on the orders tab results in a network error.",
+    priority: "Medium",
+    status: "Open",
+    category: "Billing",
+    assignee: "Liam Johnson",
+    createdAt: "2026-09-28",
+  },
+  {
+    id: "TCK-103",
+    title: "Dark mode flicker on initial page load",
+    description: "The theme flashes light mode before applying dark mode styles on page reload.",
+    priority: "Low",
+    status: "Resolved",
+    category: "Technical",
+    assignee: "Emma Watson",
+    createdAt: "2026-09-27",
+  },
+  {
+    id: "TCK-104",
+    title: "Feature request: Export table to CSV",
+    description: "Store manager wants an 'Export CSV' button for transactions and orders.",
+    priority: "Medium",
+    status: "Open",
+    category: "Feature Request",
+    assignee: "Noah Davis",
+    createdAt: "2026-09-26",
+  },
+  {
+    id: "TCK-105",
+    title: "Session timeout when idle for 10 minutes",
+    description: "Admins are getting logged out unexpectedly while filling out product details.",
+    priority: "High",
+    status: "In Progress",
+    category: "Technical",
+    assignee: "Olivia Brown",
+    createdAt: "2026-09-25",
   },
 ];
