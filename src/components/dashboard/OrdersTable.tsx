@@ -1,9 +1,14 @@
 import { useState, useMemo } from 'react'
+import { Order, OrderStatus } from "../../types";
 
-export default function OrdersTable({ orders }) {
+interface OrdersTableProps {
+  orders: Order[];
+}
+
+export default function OrdersTable({ orders }: OrdersTableProps) {
     const [search, setSearch] = useState("");
-    const [selectedStatus, setSelectedStatus] = useState("All");
-    const [sortOrder, setSortOrder] = useState("desc"); // "asc" | "desc"
+    const [selectedStatus, setSelectedStatus] = useState<OrderStatus | "All">("All");
+    const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc"); // "asc" | "desc"
 
     const processedOrders = useMemo(() => {
         const filtered = orders.filter((order) => {
@@ -22,7 +27,7 @@ export default function OrdersTable({ orders }) {
         });
     }, [orders, search, selectedStatus, sortOrder]);
 
-    const getStatusBadge = (status) => {
+    const getStatusBadge = (status: OrderStatus) => {
         switch (status) {
             case "Completed":
                 return "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
@@ -49,7 +54,7 @@ export default function OrdersTable({ orders }) {
                         className="bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 transition-colors"
                     />
 
-                    <select value={selectedStatus} onChange={(e) => setSelectedStatus(e.target.value)}
+                    <select value={selectedStatus} onChange={(e) => setSelectedStatus(e.target.value as OrderStatus | "All")}
                         className="bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-sky-500 transition-colors">
                         <option value="All">All Statuses</option>
                         <option value="Completed">Completed</option>

@@ -1,4 +1,11 @@
-export const statsData = [
+import {
+  DashboardStat,
+  Order,
+  MonthlyRevenue,
+  Product,
+} from "../types";
+
+export const statsData: DashboardStat[] = [
   {
     id: "stat-1",
     title: "Total Revenue",
@@ -29,7 +36,7 @@ export const statsData = [
   },
 ];
 
-export const recentOrders = [
+export const recentOrders: Order[] = [
   { id: "ORD-001", customer: "Sophia Martinez", date: "2026-09-08", amount: "$320.00", status: "Completed" },
   { id: "ORD-002", customer: "Liam Johnson", date: "2026-09-08", amount: "$125.50", status: "Pending" },
   { id: "ORD-003", customer: "Emma Watson", date: "2026-09-07", amount: "$840.00", status: "Completed" },
@@ -38,7 +45,7 @@ export const recentOrders = [
   { id: "ORD-006", customer: "Ethan Wilson", date: "2026-09-04", amount: "$95.00", status: "Pending" },
 ];
 
-export const monthlyRevenue = [
+export const monthlyRevenue: MonthlyRevenue[] = [
   { month: "Jan", revenue: 28000, profit: 12000 },
   { month: "Feb", revenue: 35000, profit: 15000 },
   { month: "Mar", revenue: 30000, profit: 13000 },
@@ -53,7 +60,7 @@ export const monthlyRevenue = [
   { month: "Dec", revenue: 82000, profit: 49000 },
 ];
 
-export const initialProducts = [
+export const initialProducts: Product[] = [
   {
     id: "PRD-001",
     name: "Wireless Ergonomic Keyboard",

@@ -1,19 +1,27 @@
-import { useState } from "react";
+import { useState, FormEvent } from "react";
+import { Product, ProductCategory } from "../../types";
 
-export default function ProductsEditor({ isOpen, onClose, onSave, categories = [] }) {
+interface ProductsEditorProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (product: Product) => void;
+  categories?: ProductCategory[];
+}
+
+export default function ProductsEditor({ isOpen, onClose, onSave, categories = [] }: ProductsEditorProps) {
   const [name, setName] = useState("");
-  const [category, setCategory] = useState(categories[0] || "Electronics");
+  const [category, setCategory] = useState<ProductCategory>(categories[0] || "Electronics");
   const [price, setPrice] = useState("");
   const [stock, setStock] = useState("");
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!name.trim() || !price || !stock) return;
 
     const parsedStock = parseInt(stock, 10);
-    const newProduct = {
+    const newProduct: Product = {
       id: `PRD-${Date.now().toString().slice(-4)}`,
       name: name.trim(),
       category,
@@ -64,7 +72,7 @@ export default function ProductsEditor({ isOpen, onClose, onSave, categories = [
               </label>
               <select
                 value={category}
-                onChange={(e) => setCategory(e.target.value)}
+                onChange={(e) => setCategory(e.target.value as ProductCategory)}
                 className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-sky-500 transition-colors"
               >
                 {categories.map((cat) => (

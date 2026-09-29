@@ -1,6 +1,12 @@
 import { useAuth } from "../../context/AuthContext";
 
-export default function Navbar({ onMenuClick, onRefresh, loading }) {
+interface NavbarProps {
+  onMenuClick: () => void;
+  onRefresh?: () => void;
+  loading?: boolean;
+}
+
+export default function Navbar({ onMenuClick, onRefresh, loading }: NavbarProps) {
     const { user } = useAuth();
     
     return (

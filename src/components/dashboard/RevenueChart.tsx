@@ -1,8 +1,15 @@
 import { useState } from 'react'
+import { MonthlyRevenue } from "../../types";
 
-export default function RevenueChart({ data, error, retryError }) {
-  const [timeframe, setTimeframe] = useState("12m");
-  const [hoveredBar, setHoveredBar] = useState(null);
+interface RevenueChartProps {
+  data: MonthlyRevenue[];
+  error?: string | null;
+  retryError?: () => void;
+}
+
+export default function RevenueChart({ data, error, retryError }: RevenueChartProps) {
+  const [timeframe, setTimeframe] = useState<"6m" | "12m">("12m");
+  const [hoveredBar, setHoveredBar] = useState<MonthlyRevenue | null>(null);
 
   const displayData = timeframe === "6m" ? data.slice(6) : data;
 

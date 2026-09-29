@@ -1,4 +1,11 @@
-export default function MetricCard({ title, value, change, isPositive }) {
+interface MetricCardProps {
+  title: string;
+  value: string | number;
+  change: string;
+  isPositive: boolean;
+}
+
+export default function MetricCard({ title, value, change, isPositive }: MetricCardProps ) {
     return (
         <div className="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow-sm hover:border-slate-600 transition-colors">
             <p className="text-sm font-medium text-slate-400">{title}</p>

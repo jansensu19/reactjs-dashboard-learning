@@ -37,6 +37,9 @@ jobs:
       - name: Run Linter
         run: npm run lint
 
+      - name: Run TypeScript Check
+        run: npm run typecheck
+
       - name: Build Production Assets
         run: npm run build
 

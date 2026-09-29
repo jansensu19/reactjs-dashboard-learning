@@ -1,16 +1,22 @@
 import { useState, useMemo } from 'react'
 import { useAuth } from "../../context/AuthContext";
 import ProductsEditor from "../ui/ProductsEditor";
+import { Product, ProductCategory, ProductStatus } from "../../types";
 
-export default function ProductsList({ products }) {
+interface ProductsListProps {
+    products: Product[];
+    deleteProduct?: (productId: string) => void;
+}
+
+export default function ProductsList({ products, deleteProduct }: ProductsListProps) {
     const { user } = useAuth();
     const isAdmin = user?.role === "Admin";
     const [search, setSearch] = useState("");
-    const [categoryFilter, setCategoryFilter] = useState("All");
-    const [sortBy, setSortBy] = useState("price")
-    const [sortStock, setSortStock] = useState("desc");
-    const [sortPrice, setSortPrice] = useState("desc");
-    const categories = [...new Set(products.map((product) => product.category))];
+    const [categoryFilter, setCategoryFilter] = useState<ProductCategory | "All">("All");
+    const [sortBy, setSortBy] = useState<"price" | "stock">("price");
+    const [sortStock, setSortStock] = useState<"asc" | "desc">("desc");
+    const [sortPrice, setSortPrice] = useState<"asc" | "desc">("desc");
+    const categories = [...new Set(products.map((product) => product.category))] as ProductCategory[];
     const [productList, setProductList] = useState(products);
     const [prevProducts, setPrevProducts] = useState(products);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,13 +26,14 @@ export default function ProductsList({ products }) {
         setProductList(products);
     }
 
-    const deleteProduct = (productId) => {
-        setProductList((prevProducts) =>
-            prevProducts.filter((product) => product.id !== productId)
-        );
+    const handleDelete = (productId: string) => {
+        if (deleteProduct) {
+            deleteProduct(productId);
+        }
+        setProductList((prev) => prev.filter((p) => p.id !== productId));
     };
 
-    const handleAddProduct = (newProduct) => {
+    const handleAddProduct = (newProduct: Product) => {
         setProductList((prev) => [newProduct, ...prev]);
     };
 
@@ -73,7 +80,7 @@ export default function ProductsList({ products }) {
         sortStock,
     ]);
 
-    const getStatusBadge = (status) => {
+    const getStatusBadge = (status: ProductStatus) => {
         switch (status) {
             case "In Stock":
                 return "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
@@ -110,7 +117,7 @@ export default function ProductsList({ products }) {
 
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                 <div className="flex flex-wrap items-center gap-3">
-                    <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}
+                    <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value as ProductCategory)}
                         className="bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-sky-500 transition-colors">
                         <option value="All">All Products</option>
                         {categories.map((category) => {
@@ -172,7 +179,7 @@ export default function ProductsList({ products }) {
                                     </td>
                                     <td className="py-3.5 px-4 text-right">
                                         {isAdmin &&
-                                            <button onClick={() => deleteProduct(product.id)} className="bg-red-900 hover:bg-slate-700 border border-red-700 text-xs font-semibold text-red-300 px-3 py-2 rounded-lg transition-colors">Delete</button>
+                                            <button onClick={() => handleDelete(product.id)} className="bg-red-900 hover:bg-slate-700 border border-red-700 text-xs font-semibold text-red-300 px-3 py-2 rounded-lg transition-colors">Delete</button>
                                         }
                                     </td>
                                 </tr>
@@ -187,7 +194,7 @@ export default function ProductsList({ products }) {
                     </tbody>
                 </table>
             </div>
-            
+
             <ProductsEditor
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}

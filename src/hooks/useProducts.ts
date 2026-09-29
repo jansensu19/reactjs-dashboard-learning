@@ -1,21 +1,23 @@
 import { useState, useEffect, useCallback } from "react";
 import { fetchProductsData } from "../services/productApi";
+import { Product } from "../types";
 
 export function useProducts() {
-  const [products, setProduct] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [simulateError, setSimulateError] = useState(false);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [simulateError, setSimulateError] = useState<boolean>(false);
 
   const refetch = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
       const data = await fetchProductsData(simulateError);
-      setProduct(data.products);
+      setProducts(data.products);
     } catch (err) {
-      setError(err.message || "Failed to fetch dashboard metrics");
-      setProduct([]);
+      const message = err instanceof Error ? err.message : "Failed to fetch products";
+      setError(message);
+      setProducts([]);
     } finally {
       setLoading(false);
     }
@@ -28,12 +30,13 @@ export function useProducts() {
       try {
         const data = await fetchProductsData(false);
         if (isMounted) {
-          setProduct(data.products);
+          setProducts(data.products);
         }
       } catch (err) {
         if (isMounted) {
-          setError(err.message || "Failed to load initial data");
-          setProduct([]);
+          const message = err instanceof Error ? err.message : "Failed to load initial products";
+          setError(message);
+          setProducts([]);
         }
       } finally {
         if (isMounted) {
@@ -49,8 +52,8 @@ export function useProducts() {
     };
   }, []);
 
-  const deleteProduct = useCallback((productId) => {
-    setProduct((prev) => prev.filter((product) => product.id !== productId));
+  const deleteProduct = useCallback((productId: string) => {
+    setProducts((prev) => prev.filter((product) => product.id !== productId));
   }, []);
 
   return {

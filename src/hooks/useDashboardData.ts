@@ -1,14 +1,14 @@
 import { useState, useEffect, useCallback } from "react";
 import { fetchDashboardData } from "../services/api";
+import { DashboardStat, Order } from "../types";
 
 export function useDashboardData() {
-  const [stats, setStats] = useState([]);
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [simulateError, setSimulateError] = useState(false);
+  const [stats, setStats] = useState<DashboardStat[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [simulateError, setSimulateError] = useState<boolean>(false);
 
-  // useCallback ensures this function's reference doesn't change on every render
   const refetch = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -17,7 +17,8 @@ export function useDashboardData() {
       setStats(data.stats);
       setOrders(data.orders);
     } catch (err) {
-      setError(err.message || "Failed to fetch dashboard metrics");
+      const message = err instanceof Error ? err.message : "Failed to fetch dashboard metrics";
+      setError(message);
       setStats([]);
       setOrders([]);
     } finally {
@@ -37,7 +38,8 @@ export function useDashboardData() {
         }
       } catch (err) {
         if (isMounted) {
-          setError(err.message || "Failed to load initial data");
+          const message = err instanceof Error ? err.message : "Failed to load initial data";
+          setError(message);
           setStats([]);
           setOrders([]);
         }

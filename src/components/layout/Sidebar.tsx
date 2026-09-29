@@ -1,10 +1,21 @@
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
-export default function Sidebar({ isOpen, onClose }) {
+
+interface SidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+interface NavItem {
+  path: string;
+  label: string;
+  icon: string;
+}
+
+export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const { user, logout } = useAuth();
 
-  const navItems = [
+  const navItems: NavItem[] = [
     { path: "/", label: "Dashboard", icon: "📊" },
     { path: "/products", label: "Inventory", icon: "📦" },
     { path: "/transactions", label: "Transactions", icon: "💳" },

@@ -1,5 +1,14 @@
+interface Customer {
+  id: number;
+  name: string;
+  email: string;
+  spent: string;
+  orders: number;
+}
+
+
 export default function CustomersPage() {
-  const customers = [
+  const customers: Customer[] = [
     { id: 1, name: "Sophia Martinez", email: "sophia@example.com", spent: "$1,450.00", orders: 6 },
     { id: 2, name: "Liam Johnson", email: "liam@example.com", spent: "$890.50", orders: 3 },
     { id: 3, name: "Emma Watson", email: "emma@example.com", spent: "$2,340.00", orders: 12 },

@@ -1,7 +1,15 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
+import { User, UserRole } from "../types";
+
+export interface AuthContextType {
+  user: User | null;
+  isAuthenticated: boolean;
+  login: (name: string, role?: UserRole) => void;
+  logout: () => void;
+}
 
 // 1. Create the Context object
-const AuthContext = createContext(null);
+const AuthContext = createContext<AuthContextType | null>(null);
 
 // Default mock user
 const defaultUser = {
@@ -11,14 +19,18 @@ const defaultUser = {
   avatar: "U",
 };
 
-export function AuthProvider({ children }) {
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+export function AuthProvider({ children }: AuthProviderProps) {
   // Check localStorage so login persists across page reloads
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem("dashboard_user");
     return savedUser ? JSON.parse(savedUser) : defaultUser;
   });
 
-  const login = (name, role = "Editor") => {
+  const login = (name: string, role = "Editor") => {
     const newUser = {
       name,
       email: `${name.toLowerCase().replace(/\s+/g, ".")}@company.com`,

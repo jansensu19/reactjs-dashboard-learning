@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useState, FormEvent } from "react";
 import { useAuth } from "../../context/AuthContext";
+import { UserRole } from "../../types";
 
 export default function LoginModal() {
   const { login } = useAuth();
   const [name, setName] = useState("");
-  const [role, setRole] = useState("Admin");
+  const [role, setRole] = useState<UserRole>("Admin");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!name.trim()) return;
     login(name, role);
@@ -48,7 +49,7 @@ export default function LoginModal() {
             </label>
             <select
               value={role}
-              onChange={(e) => setRole(e.target.value)}
+              onChange={(e) => setRole(e.target.value as UserRole)}
               className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-sky-500 transition-colors"
             >
               <option value="Admin">Admin</option>
