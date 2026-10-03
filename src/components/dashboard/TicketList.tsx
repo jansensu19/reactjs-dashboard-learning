@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useMemo } from 'react'
 import { useAuth } from "../../context/AuthContext";
 import { Ticket, TicketCategory, TicketPriority, TicketStatus } from "../../types";

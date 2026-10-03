@@ -1,18 +1,21 @@
 import { initialProducts } from "../data/mockData";
-import { ProductsDataResponse } from "../types";
+import { Product, ProductsDataResponse } from "../types";
 
-export const fetchProductsData = (errorTest = false): Promise<ProductsDataResponse> => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const simulateError = errorTest;
+let productsStore: Product[] = [...initialProducts];
 
-      if (simulateError) {
-        reject(new Error("Failed to connect to the inventory server."));
-      } else {
-        resolve({
-          products: [...initialProducts],
-        });
-      }
-    }, 1000);
-  });
+export const fetchProductsData = async (errorTest = false): Promise<ProductsDataResponse> => {
+  if (errorTest) {
+    throw new Error("Failed to connect to the inventory server.");
+  }
+  return { products: [...productsStore] };
+};
+
+export const addProduct = async (product: Product): Promise<Product> => {
+  productsStore = [product, ...productsStore];
+  return product;
+};
+
+export const deleteProduct = async (productId: string): Promise<boolean> => {
+  productsStore = productsStore.filter((p) => p.id !== productId);
+  return true;
 };

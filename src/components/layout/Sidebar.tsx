@@ -1,6 +1,8 @@
-import { NavLink } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+"use client";
 
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useAuth } from "../../context/AuthContext";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -14,6 +16,7 @@ interface NavItem {
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const { user, logout } = useAuth();
+  const pathname = usePathname();
 
   const navItems: NavItem[] = [
     { path: "/", label: "Dashboard", icon: "📊" },
@@ -54,24 +57,24 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         </div>
 
         <nav className="flex-1 p-4 space-y-1">
-          {navItems.map((item) => (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              onClick={onClose}
-              end={item.path === "/"}
-              className={({ isActive }) =>
-                `w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+          {navItems.map((item) => {
+            const isActive = item.path === "/" ? pathname === "/" : pathname.startsWith(item.path);
+            return (
+              <Link
+                key={item.path}
+                href={item.path}
+                onClick={onClose}
+                className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                   isActive
                     ? "bg-sky-500 text-slate-950 font-semibold"
                     : "text-slate-400 hover:text-slate-100 hover:bg-slate-700/50"
-                }`
-              }
-            >
-              <span>{item.icon}</span>
-              <span>{item.label}</span>
-            </NavLink>
-          ))}
+                }`}
+              >
+                <span>{item.icon}</span>
+                <span>{item.label}</span>
+              </Link>
+            );
+          })}
         </nav>
 
         {user && (

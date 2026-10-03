@@ -1,4 +1,7 @@
-import { useState, useMemo } from 'react'
+"use client";
+
+import { useState, useMemo, useTransition } from 'react';
+import { createProductAction, deleteProductAction } from '../../actions/productActions';
 import { useAuth } from "../../context/AuthContext";
 import ProductsEditor from "../ui/ProductsEditor";
 import { Product, ProductCategory, ProductStatus } from "../../types";
@@ -8,7 +11,8 @@ interface ProductsListProps {
     deleteProduct?: (productId: string) => void;
 }
 
-export default function ProductsList({ products, deleteProduct }: ProductsListProps) {
+export default function ProductsList({ products }: ProductsListProps) {
+    const [isPending, startTransition] = useTransition();
     const { user } = useAuth();
     const isAdmin = user?.role === "Admin";
     const [search, setSearch] = useState("");
@@ -27,14 +31,21 @@ export default function ProductsList({ products, deleteProduct }: ProductsListPr
     }
 
     const handleDelete = (productId: string) => {
-        if (deleteProduct) {
-            deleteProduct(productId);
-        }
-        setProductList((prev) => prev.filter((p) => p.id !== productId));
+        startTransition(async () => {
+            // Optimistic local update
+            setProductList((prev) => prev.filter((p) => p.id !== productId));
+            // Server mutation + automatic cache revalidation
+            await deleteProductAction(productId);
+        });
     };
 
     const handleAddProduct = (newProduct: Product) => {
-        setProductList((prev) => [newProduct, ...prev]);
+        startTransition(async () => {
+            // Optimistic local update
+            setProductList((prev) => [newProduct, ...prev]);
+            // Server mutation + automatic cache revalidation
+            await createProductAction(newProduct);
+        });
     };
 
     const processedProducts = useMemo(() => {
@@ -99,6 +110,11 @@ export default function ProductsList({ products, deleteProduct }: ProductsListPr
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                 <div>
                     <h2 className="text-lg font-bold text-white">Products List</h2>
+                    {isPending && (
+                        <span className="text-xs text-sky-400 animate-pulse font-medium">
+                            Syncing with server...
+                        </span>
+                    )}
                     <p className="text-xs text-slate-400 mt-0.5">
                         Showing {processedProducts.length} filtered Products
                     </p>

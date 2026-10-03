@@ -1,4 +1,6 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+"use client";
+
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { User, UserRole } from "../types";
 
 export interface AuthContextType {
@@ -12,10 +14,10 @@ export interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 // Default mock user
-const defaultUser = {
+const defaultUser: User = {
   name: "Unknown",
   email: "Unknown@gmail.com",
-  role: "Unknown",
+  role: "Analyst",
   avatar: "U",
 };
 
@@ -24,14 +26,22 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  // Check localStorage so login persists across page reloads
-  const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem("dashboard_user");
-    return savedUser ? JSON.parse(savedUser) : defaultUser;
-  });
+  const [user, setUser] = useState<User | null>(defaultUser);
 
-  const login = (name: string, role = "Editor") => {
-    const newUser = {
+  // Sync with localStorage on client mount (SSR-safe)
+  useEffect(() => {
+    try {
+      const savedUser = localStorage.getItem("dashboard_user");
+      if (savedUser) {
+        setUser(JSON.parse(savedUser));
+      }
+    } catch {
+      // ignore storage access errors
+    }
+  }, []);
+
+  const login = (name: string, role: UserRole = "Editor") => {
+    const newUser: User = {
       name,
       email: `${name.toLowerCase().replace(/\s+/g, ".")}@company.com`,
       role,

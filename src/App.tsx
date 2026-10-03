@@ -1,14 +1,14 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import DashboardLayout from "./components/layout/DashboardLayout";
-import DashboardOverview from "./pages/DashboardOverview";
-import TransactionsPage from "./pages/TransactionsPage";
-import CustomersPage from "./pages/CustomersPage";
-import SettingsPage from "./pages/SettingsPage";
-import NotFoundPage from "./pages/NotFoundPage";
+import DashboardOverview from "./views/DashboardOverview";
+import TransactionsPage from "./views/TransactionsPage";
+import CustomersPage from "./views/CustomersPage";
+import SettingsPage from "./views/SettingsPage";
+import NotFoundPage from "./views/NotFoundPage";
 import LoginModal from "./components/auth/LoginModal";
 import { useAuth } from "./context/AuthContext";
-import ProductsPage from "./pages/ProductsPage";
-import TicketsPage from "./pages/TicketsPage";
+import ProductsPage from "./views/ProductsPage";
+import TicketsPage from "./views/TicketsPage";
 
 export default function App() {
   const { isAuthenticated } = useAuth();
